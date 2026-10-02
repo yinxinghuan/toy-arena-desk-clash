@@ -1,0 +1,210 @@
+{
+  "reports": [
+    {
+      "tutorialSeconds": 2.125,
+      "snapshot": {
+        "phase": "playing",
+        "index": 0,
+        "time": 0,
+        "x": 479.75358083417166,
+        "y": 390,
+        "gate": 0,
+        "broken": 0,
+        "collected": 0,
+        "held": 0,
+        "hits": 0,
+        "tutorial": true,
+        "practiceGate": true,
+        "practiceBlock": true,
+        "stars": [
+          0,
+          0,
+          0
+        ],
+        "muted": false,
+        "marbles": 0,
+        "cooldown": 0.8166666666666665,
+        "hazards": []
+      }
+    },
+    {
+      "case": "race",
+      "snapshot": {
+        "phase": "result",
+        "index": 0,
+        "time": 8.24999999999999,
+        "x": 708.8238985720992,
+        "y": 435.13035881354773,
+        "gate": 5,
+        "broken": 0,
+        "collected": 0,
+        "held": 0,
+        "hits": 0,
+        "tutorial": false,
+        "practiceGate": false,
+        "practiceBlock": false,
+        "stars": [
+          3,
+          0,
+          0
+        ],
+        "muted": false,
+        "marbles": 0,
+        "cooldown": 0,
+        "hazards": []
+      }
+    },
+    {
+      "case": "capture",
+      "snapshot": {
+        "phase": "result",
+        "index": 1,
+        "time": 25.766666666666485,
+        "x": 539.0315981946571,
+        "y": 285.7230800105357,
+        "gate": 0,
+        "broken": 8,
+        "collected": 0,
+        "held": 4.016666666666658,
+        "hits": 0,
+        "tutorial": false,
+        "practiceGate": false,
+        "practiceBlock": false,
+        "stars": [
+          3,
+          3,
+          0
+        ],
+        "muted": false,
+        "marbles": 0,
+        "cooldown": 0,
+        "hazards": []
+      }
+    },
+    {
+      "case": "survival",
+      "snapshot": {
+        "phase": "result",
+        "index": 2,
+        "time": 45.016666666665394,
+        "x": 367.9414475796441,
+        "y": 355.52719989917654,
+        "gate": 0,
+        "broken": 0,
+        "collected": 5,
+        "held": 0,
+        "hits": 0,
+        "tutorial": false,
+        "practiceGate": false,
+        "practiceBlock": false,
+        "stars": [
+          3,
+          3,
+          2
+        ],
+        "muted": false,
+        "marbles": 3,
+        "cooldown": 0,
+        "hazards": [
+          {
+            "x": 294.52169347651255,
+            "y": 479.4676924008495,
+            "vx": -118.09566130469618,
+            "vy": 21.293538480170113,
+            "warning": -0.016666666666666562
+          },
+          {
+            "x": 128.951988363457,
+            "y": 288.25229421649465,
+            "vx": 107.90397672691438,
+            "vy": 52.504588432988584,
+            "warning": -0.016666666666666562
+          },
+          {
+            "x": 645.5343675210406,
+            "y": 205.00658806395927,
+            "vx": -119.73281623948249,
+            "vy": 8.003294031979536,
+            "warning": -0.016666666666666562
+          }
+        ]
+      }
+    },
+    {
+      "case": "survival-failure",
+      "snapshot": {
+        "phase": "result",
+        "index": 2,
+        "time": 8.700000000000012,
+        "x": 480,
+        "y": 280,
+        "gate": 0,
+        "broken": 0,
+        "collected": 0,
+        "held": 0,
+        "hits": 3,
+        "tutorial": false,
+        "practiceGate": false,
+        "practiceBlock": false,
+        "stars": [
+          3,
+          3,
+          2
+        ],
+        "muted": false,
+        "marbles": 5,
+        "cooldown": 0,
+        "hazards": [
+          {
+            "x": 802.2434929221716,
+            "y": 345.24436152992604,
+            "vx": 117.61350289846497,
+            "vy": 23.813104290553397,
+            "warning": -0.016666666666666562
+          },
+          {
+            "x": 323.1387140586287,
+            "y": 283.4858063542456,
+            "vx": -119.97038133979319,
+            "vy": 2.6660084742176156,
+            "warning": -0.016666666666666562
+          },
+          {
+            "x": 452.31789581094534,
+            "y": 284.37445597061213,
+            "vx": 118.52918193014014,
+            "vy": -18.730537391429554,
+            "warning": -0.016666666666666562
+          },
+          {
+            "x": 693.6513403479335,
+            "y": 352.27218179670905,
+            "vx": -113.67247108043449,
+            "vy": -38.45216922967786,
+            "warning": -0.016666666666666562
+          },
+          {
+            "x": 96.0935584795845,
+            "y": 166.24994325321018,
+            "vx": 115.05577352500647,
+            "vy": 34.090599562964876,
+            "warning": -0.016666666666666562
+          }
+        ]
+      }
+    },
+    {
+      "case": "save-after-reload",
+      "snapshot": {
+        "phase": "menu",
+        "stars": [
+          3,
+          3,
+          2
+        ],
+        "muted": true
+      }
+    }
+  ],
+  "errors": []
+}

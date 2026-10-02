@@ -1,0 +1,91 @@
+export const LEVELS = [
+  {
+    name: "Tape Sprint",
+    kind: "race",
+    limit: 60,
+    subtitle: "Follow the five numbered gates. Use ramps to cut corners.",
+    goal: "Cross 5 gates in order",
+    start: [130, 390],
+    gates: [
+      [280, 390],
+      [420, 210],
+      [680, 170],
+      [800, 330],
+      [670, 430],
+    ],
+    ramps: [
+      [355, 300],
+      [735, 255],
+    ],
+    walls: [
+      [490, 285, 180, 34],
+      [250, 130, 32, 125],
+    ],
+    blocks: [],
+    medals: ["Cross all 5 gates", "Finish in 35 seconds", "Take no damage"],
+  },
+  {
+    name: "Stampede Station",
+    kind: "capture",
+    limit: 60,
+    subtitle: "Dash into paper toys, then park on the brass capture pad.",
+    goal: "Break 8 toys + hold the pad for 4s",
+    start: [120, 400],
+    gates: [],
+    ramps: [
+      [255, 320],
+      [750, 210],
+    ],
+    walls: [
+      [355, 200, 30, 115],
+      [670, 335, 130, 28],
+    ],
+    blocks: [
+      [245, 160],
+      [315, 400],
+      [450, 140],
+      [540, 200],
+      [630, 150],
+      [800, 400],
+      [720, 270],
+      [500, 410],
+    ],
+    medals: [
+      "Break 8 toys and capture the pad",
+      "Finish in 40 seconds",
+      "Take no damage",
+    ],
+  },
+  {
+    name: "Marble Mayhem",
+    kind: "survive",
+    limit: 45,
+    subtitle:
+      "Keep moving! Collect 4 brass nuts and survive the rolling marbles.",
+    goal: "Survive 45s + collect 4 nuts",
+    start: [480, 280],
+    gates: [],
+    ramps: [
+      [270, 240],
+      [670, 380],
+    ],
+    walls: [
+      [150, 180, 120, 25],
+      [680, 165, 120, 25],
+    ],
+    blocks: [],
+    nuts: [
+      [150, 400],
+      [320, 160],
+      [740, 360],
+      [800, 230],
+      [430, 410],
+      [600, 145],
+    ],
+    medals: [
+      "Survive and collect 4 nuts",
+      "Take no damage",
+      "Collect all 6 nuts",
+    ],
+  },
+];

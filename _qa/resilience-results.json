@@ -1,0 +1,29 @@
+{
+  "firstScreenBytes": 25062,
+  "resources": [
+    {
+      "url": "/",
+      "bytes": 1662
+    },
+    {
+      "url": "/assets/index-Z_cv2hp5.css",
+      "bytes": 3412
+    },
+    {
+      "url": "/assets/index-B0DlxETo.js",
+      "bytes": 19988
+    }
+  ],
+  "frames": {
+    "frames": 241,
+    "meanMs": 8.300829875543403,
+    "worstMs": 10.399999999999864,
+    "dpr": 1,
+    "canvasWidth": 800
+  },
+  "tutorialTimeout": "30 seconds → safe pause, no forced learning claim",
+  "blur": "simulation frozen",
+  "corruptSave": "warning and playable reset",
+  "blockedSave": "warning and playable session",
+  "errors": []
+}

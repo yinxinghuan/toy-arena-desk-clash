@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="An original keyboard-and-mouse toy vehicle arena on a work desk."
+    />
+    <title>Toy Arena: Desk Clash</title>
+    <style id="toy-long-press-guard">
+      html,
+      body,
+      #app {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      input,
+      textarea,
+      [contenteditable="true"] {
+        -webkit-touch-callout: default;
+        -webkit-user-select: text;
+        user-select: text;
+      }
+      img,
+      svg,
+      canvas {
+        -webkit-user-drag: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="app">
+      <canvas id="arena" aria-label="Toy vehicle desk arena"></canvas>
+      <header id="hud" hidden>
+        <div><strong id="level-name"></strong><span id="objective"></span></div>
+        <div class="ta-stats">
+          <span id="timer"></span><span id="health"></span
+          ><button id="pause">Pause</button><button id="mute">Sound on</button>
+        </div>
+      </header>
+      <section id="overlay" aria-live="polite"></section>
+      <aside id="tutorial" hidden></aside>
+      <footer id="drive-help" hidden>
+        WASD / Arrows: drive · Mouse: aim · Click / Space: dash · P: pause · R:
+        retry
+      </footer>
+      <p id="save-warning" role="status"></p>
+    </main>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

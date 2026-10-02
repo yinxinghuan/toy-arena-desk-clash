@@ -1,0 +1,275 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color: #203239;
+  background: #203239;
+  font-synthesis: none;
+  --paper: #fff3d6;
+  --teal: #126a70;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+#app {
+  position: relative;
+  width: min(100vw, 177.7778dvh);
+  height: min(100dvh, 56.25vw);
+  overflow: hidden;
+  background: #dabd8b;
+}
+canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+button {
+  font: 700 15px system-ui;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 2px solid #203239;
+  border-radius: 8px;
+  color: #203239;
+  background: var(--paper);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+button:hover {
+  background: #ffdd93;
+}
+button:active {
+  transform: translateY(2px);
+}
+button:focus-visible {
+  outline: 3px solid #126a70;
+  outline-offset: 3px;
+}
+button.primary {
+  background: var(--teal);
+  color: white;
+}
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+header {
+  position: absolute;
+  inset: 0 0 auto;
+  min-height: 66px;
+  background: var(--paper);
+  border-bottom: 3px solid #203239;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  gap: 8px;
+}
+#hud[hidden],
+#tutorial[hidden],
+#drive-help[hidden] {
+  display: none;
+}
+header strong {
+  display: block;
+  font-size: 18px;
+}
+#objective {
+  font-size: 14px;
+}
+.ta-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+#health {
+  font-size: 13px;
+}
+#overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: #20323966;
+}
+#overlay:empty {
+  display: none;
+}
+.ta-panel {
+  background: var(--paper);
+  border: 3px solid #203239;
+  border-radius: 12px;
+  box-shadow: 7px 7px 0 #203239;
+  max-width: 720px;
+  width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  padding: 24px;
+}
+.ta-eyebrow {
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 800;
+  color: #126a70;
+  margin: 0 0 4px;
+}
+.ta-panel h1 {
+  font-size: clamp(28px, 4.8vw, 48px);
+  line-height: 1.05;
+  margin: 0 0 12px;
+}
+.ta-panel h2 {
+  margin: 0 0 10px;
+  font-size: 28px;
+}
+.ta-panel p {
+  font-size: 16px;
+  line-height: 1.45;
+  margin: 8px 0;
+}
+.ta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.ta-levels {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.ta-levels button {
+  text-align: left;
+  padding: 14px;
+}
+.ta-levels strong,
+.ta-levels span {
+  display: block;
+}
+.ta-levels span {
+  font-size: 13px;
+  margin-top: 6px;
+}
+.ta-medals {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+}
+.ta-medals li {
+  padding: 6px 0;
+  border-bottom: 1px solid #d5b789;
+}
+#tutorial {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  right: 12px;
+  background: var(--paper);
+  border: 2px solid #203239;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+#tutorial svg {
+  flex: 0 0 70px;
+  height: 45px;
+}
+#tutorial div {
+  flex: 1;
+  font-size: 16px;
+}
+#tutorial small {
+  display: block;
+  font-size: 13px;
+  color: #526369;
+}
+#drive-help {
+  position: absolute;
+  bottom: 3px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  background: var(--paper);
+}
+#save-warning {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  background: #fff3d6;
+  color: #a33220;
+  font-size: 12px;
+  padding: 0 8px;
+  pointer-events: none;
+}
+#save-warning:empty {
+  display: none;
+}
+@media (max-height: 510px) {
+  .ta-panel {
+    padding: 16px;
+    max-width: 660px;
+  }
+  .ta-panel p {
+    margin: 6px 0;
+  }
+  .ta-levels {
+    margin-top: 12px;
+  }
+  .ta-actions {
+    margin-top: 12px;
+  }
+  header {
+    padding: 6px 12px;
+    min-height: 58px;
+  }
+  header strong {
+    font-size: 16px;
+  }
+  .ta-stats {
+    gap: 6px;
+  }
+  #objective {
+    font-size: 13px;
+  }
+}
+@media (max-width: 650px) {
+  header {
+    flex-wrap: wrap;
+  }
+  .ta-levels {
+    grid-template-columns: 1fr;
+  }
+  #tutorial svg {
+    display: none;
+  }
+  #tutorial div {
+    font-size: 14px;
+  }
+  #drive-help {
+    display: none;
+  }
+  .ta-panel h1 {
+    font-size: 28px;
+  }
+  .ta-panel {
+    max-height: 96%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  button:active {
+    transform: none;
+  }
+}

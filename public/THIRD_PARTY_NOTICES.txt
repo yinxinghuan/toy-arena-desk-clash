@@ -1,0 +1,8 @@
+Toy Arena: Desk Clash — W0–1
+All game artwork, level layouts, sound effects and synthesized musical composition
+are original for this project. No external image, model, font or audio is shipped.
+System fonts are supplied by the player's operating system.
+
+Build-time dependency: Vite 6.4.3, https://github.com/vitejs/vite, MIT license.
+Vite and its build tools are not included as runtime game libraries.
+The dependency lockfile records exact transitive build-tool versions.

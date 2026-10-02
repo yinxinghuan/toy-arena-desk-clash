@@ -1,0 +1,19 @@
+{
+  "playing": {
+    "state": "running",
+    "peak": 0.04212917014956474
+  },
+  "muted": {
+    "state": "running",
+    "peak": 0
+  },
+  "restored": {
+    "state": "running",
+    "peak": 0.05019586533308029
+  },
+  "paused": {
+    "state": "running",
+    "peak": 0
+  },
+  "note": "Measured real WebAudio output graph, not a human listening test. Playwright WebM contains video only."
+}
