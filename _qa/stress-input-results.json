@@ -1,0 +1,116 @@
+{
+  "base": "http://127.0.0.1:4187/",
+  "productionCommit": "71cdef815c946f53fd650b33d100d6948cf76051",
+  "checks": [
+    {
+      "case": "25 rapid dash clicks",
+      "snapshot": {
+        "phase": "playing",
+        "index": 0,
+        "time": 0.7833333333333341,
+        "x": 203.01499929849496,
+        "y": 388.8693445876122,
+        "gate": 0,
+        "broken": 0,
+        "collected": 0,
+        "held": 0,
+        "hits": 0,
+        "tutorial": false,
+        "practiceGate": false,
+        "practiceBlock": false,
+        "stars": [
+          0,
+          0,
+          0
+        ],
+        "muted": false,
+        "marbles": 0,
+        "cooldown": 1.0833333333333335,
+        "hazards": []
+      }
+    },
+    {
+      "case": "20 rapid retries",
+      "snapshot": {
+        "phase": "playing",
+        "index": 0,
+        "time": 0.15,
+        "x": 130,
+        "y": 390,
+        "gate": 0,
+        "broken": 0,
+        "collected": 0,
+        "held": 0,
+        "hits": 0,
+        "tutorial": false,
+        "practiceGate": false,
+        "practiceBlock": false,
+        "stars": [
+          0,
+          0,
+          0
+        ],
+        "muted": false,
+        "marbles": 0,
+        "cooldown": 0,
+        "hazards": []
+      }
+    },
+    {
+      "case": "tab-switch focus probe; explicit blur fallback if no native event",
+      "focusBefore": {
+        "focus": true,
+        "visibility": "visible"
+      },
+      "focusAfter": {
+        "focus": true,
+        "visibility": "visible"
+      },
+      "nativeBlurObserved": false,
+      "snapshot": {
+        "phase": "paused",
+        "index": 0,
+        "time": 0.9833333333333347,
+        "x": 130,
+        "y": 390,
+        "gate": 0,
+        "broken": 0,
+        "collected": 0,
+        "held": 0,
+        "hits": 0,
+        "tutorial": false,
+        "practiceGate": false,
+        "practiceBlock": false,
+        "stars": [
+          0,
+          0,
+          0
+        ],
+        "muted": false,
+        "marbles": 0,
+        "cooldown": 0,
+        "hazards": []
+      }
+    }
+  ],
+  "audio": {
+    "sound": {
+      "state": "running",
+      "peak": 0.0567709282040596
+    },
+    "silent": {
+      "state": "running",
+      "peak": 0
+    },
+    "restored": {
+      "state": "running",
+      "peak": 0.05727225914597511
+    },
+    "stopped": {
+      "state": "running",
+      "peak": 0
+    }
+  },
+  "errors": [],
+  "note": "Normal keyboard/mouse events; tab-switch focus probe reports whether native blur was observed. If not, an explicit blur event only tests the handler, not OS focus behavior. Read-only diagnostics and QA-only analyser; no game progress writes. Video has no audio track."
+}
