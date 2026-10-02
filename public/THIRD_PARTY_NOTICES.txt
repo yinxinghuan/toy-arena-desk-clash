@@ -1,8 +1,32 @@
-Toy Arena: Desk Clash — W0–1
-All game artwork, level layouts, sound effects and synthesized musical composition
-are original for this project. No external image, model, font or audio is shipped.
-System fonts are supplied by the player's operating system.
+Toy Arena: Desk Clash — W2–3
+Artwork, maps and game source are original (MIT, copyright yinxinghuan).
+System fonts supplied by the operating system. No external models/textures.
 
-Build-time dependency: Vite 6.4.3, https://github.com/vitejs/vite, MIT license.
-Vite and its build tools are not included as runtime game libraries.
-The dependency lockfile records exact transitive build-tool versions.
+MUSIC
+Candy (Three Red Hearts), Abstraction / Tallbeard Studios.
+Source: https://tallbeard.itch.io/three-red-hearts-prepare-to-dev
+License announcement: https://tallbeard.itch.io/three-red-hearts-prepare-to-dev/devlog/672871/updating-this-packs-license
+Version: 20240208-01; official HTML preview upload 9601521-920605.
+File: media/Three Red Hearts - Candy.ogg, renamed audio/candy.ogg.
+No edits. Author publishes seamless loops; decoded 52.173787s loop:
+start 0, end AudioBuffer.duration.
+CC0 1.0 Universal https://creativecommons.org/publicdomain/zero/1.0/
+
+SOUND EFFECTS
+Kenney Impact Sounds 1.0 (2019), Kenney / www.kenney.nl.
+https://kenney.nl/assets/impact-sounds
+hit.ogg = impactWood_medium_000.ogg; dash.ogg = impactSoft_medium_000.ogg.
+Kenney Music Jingles (archive 2017-10-28), Kenney Vleugels.
+https://kenney.nl/assets/music-jingles
+reward.ogg = jingles_STEEL00.ogg; chain.ogg = jingles_STEEL01.ogg;
+win.ogg = jingles_NES00.ogg; lose.ogg = jingles_NES01.ogg.
+CC0 1.0 Universal https://creativecommons.org/publicdomain/zero/1.0/
+Unmodified recordings, renamed; runtime volume mixing only.
+Original notices: audio/Kenney-Impact-License.txt, audio/Kenney-Jingles-License.txt.
+Complete CC0 legal text: audio/CC0-1.0.txt.
+Assets may be used in personal and commercial projects; credit optional.
+
+Build dependency / generated module-preload helper:
+Vite 6.4.3 https://github.com/vitejs/vite (MIT).
+Complete core permission notice: VITE_LICENSE.txt.
+Exact build dependencies are recorded in package-lock.json.

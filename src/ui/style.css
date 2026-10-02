@@ -156,6 +156,45 @@ header strong {
 .ta-levels span {
   display: block;
 }
+.ta-parts {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ta-parts button {
+  flex: 1;
+  min-width: 150px;
+  text-align: left;
+}
+.ta-parts span {
+  display: block;
+  font-size: 13px;
+  margin-top: 6px;
+}
+button[aria-pressed="true"] {
+  background: #126a70;
+  color: white;
+}
+.ta-contrast .ta-panel,
+.ta-contrast header {
+  background: #fff;
+}
+.ta-contrast canvas {
+  filter: contrast(1.25);
+}
+label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+input[type="range"] {
+  min-height: 44px;
+  min-width: 160px;
+  accent-color: #126a70;
+}
+output {
+  min-width: 45px;
+}
 .ta-levels span {
   font-size: 13px;
   margin-top: 6px;
@@ -168,6 +207,39 @@ header strong {
 .ta-medals li {
   padding: 6px 0;
   border-bottom: 1px solid #d5b789;
+}
+.ta-medals svg {
+  width: 22px;
+  height: 22px;
+  vertical-align: middle;
+  margin-right: 8px;
+  fill: none;
+  stroke: #203239;
+  stroke-width: 1.5;
+}
+.ta-medals .ta-earned svg {
+  fill: #ffc857;
+}
+.ta-earned {
+  animation: ta-star-stamp 0.25s both;
+  animation-delay: var(--ta-delay);
+}
+.ta-record {
+  font-weight: 800;
+  color: #126a70;
+  border-left: 5px solid #126a70;
+  padding-left: 8px;
+  animation: ta-star-stamp 0.25s both;
+}
+@keyframes ta-star-stamp {
+  from {
+    opacity: 0.4;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 #tutorial {
   position: absolute;
@@ -269,6 +341,10 @@ header strong {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .ta-earned,
+  .ta-record {
+    animation: none;
+  }
   button:active {
     transform: none;
   }

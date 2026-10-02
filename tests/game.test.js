@@ -38,8 +38,8 @@ test("race only accepts sequential gates and awards independent stars", () => {
   g.update(1 / 60, {});
   assert.equal(g.gate, 0);
   assert.ok(g.gateHintRemaining > 0);
-  assert.ok(g.progress().includes("Next: Gate 1"));
-  for (const [x, y] of g.level.gates) {
+  assert.ok(g.progress().includes("Next Gate 1"));
+  for (const [x, y] of Array.from({ length: 4 }, () => g.level.gates).flat()) {
     g.p.x = x;
     g.p.y = y;
     g.p.vx = g.p.vy = 0;
@@ -47,10 +47,11 @@ test("race only accepts sequential gates and awards independent stars", () => {
   }
   assert.ok(g.won);
   assert.equal(g.gateHintRemaining, 0);
+  g.jumps = 2;
   assert.equal(starsFor(g), 3);
-  g.time = 40;
+  g.time = 70;
   assert.equal(starsFor(g), 2);
-  g.hits = 1;
+  g.jumps = 0;
   assert.equal(starsFor(g), 1);
 });
 test("capture requires all toys before pad hold", () => {
@@ -59,18 +60,20 @@ test("capture requires all toys before pad hold", () => {
   g.p.y = 300;
   g.update(1, {});
   assert.equal(g.held, 0);
-  for (const b of g.blocks) {
-    g.p.x = b.x;
-    g.p.y = b.y;
-    g.p.dash = 0.22;
-    g.p.vx = g.p.vy = 0;
-    g.update(1 / 60, {});
+  for (let round = 0; round < 2; round++) {
+    for (const b of g.blocks) {
+      g.p.x = b.x;
+      g.p.y = b.y;
+      g.p.dash = 0.22;
+      g.p.vx = g.p.vy = 0;
+      g.update(1 / 60, {});
+    }
+    assert.equal(g.broken, 8 * (round + 1));
+    g.p.x = g.pad[0];
+    g.p.y = g.pad[1];
+    g.p.dash = 0;
+    for (let i = 0; i < 301; i++) g.update(1 / 60, {});
   }
-  assert.equal(g.broken, 8);
-  g.p.x = 520;
-  g.p.y = 300;
-  g.p.dash = 0;
-  for (let i = 0; i < 245; i++) g.update(1 / 60, {});
   assert.ok(g.won);
 });
 test("survival needs nuts, three hits fail and airborne toy is protected", () => {
@@ -109,14 +112,14 @@ test("ramp launch and pool bounds", () => {
 });
 test("timeout, best-save normalization, corruption and blocked storage", () => {
   const g = new Game();
-  g.time = 60;
+  g.time = 90;
   g.update(1 / 60, {});
   assert.ok(g.ended && !g.won);
   assert.deepEqual(
     validateSave({ version: 1, stars: [8, -2, "2"] }).stars,
-    [3, 0, 2],
+    [3, 0, 2, 0, 0, 0, 0, 0, 0, 0],
   );
-  assert.equal(readSave({ getItem: () => "{" }).data.version, 1);
+  assert.equal(readSave({ getItem: () => "{" }).data.version, 2);
   assert.ok(
     writeSave(
       {

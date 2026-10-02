@@ -1,21 +1,32 @@
-import { LEVELS } from "../../content/levels.js";
+import { LEVELS, SANDBOX } from "../../content/levels.js";
+import { statsFor } from "../../content/builds.js";
 export const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
-export function starsFor(g) {
-  if (!g.won) return 0;
-  return (
-    1 +
-    Number(
-      g.level.kind === "survive"
+export function starConditions(g) {
+  return [
+    g.won,
+    g.won &&
+      (g.level.kind === "survive"
         ? g.hits === 0
-        : g.time <= (g.level.kind === "race" ? 35 : 40),
-    ) +
-    Number(g.level.kind === "survive" ? g.collected === 6 : g.hits === 0)
-  );
+        : g.time <= (g.level.par || 40)),
+    g.won &&
+      (g.level.skill === "ramps"
+        ? g.jumps >= 2
+        : g.level.skill === "chain"
+          ? g.bestChain >= 3
+          : g.level.skill === "nuts"
+            ? g.collected >= 6
+            : g.level.skill === "marbles"
+              ? g.smashed >= 3
+              : g.hits === 0),
+  ];
 }
+export const starsFor = (g) =>
+  g.level.kind === "sandbox" ? 0 : starConditions(g).filter(Boolean).length;
 export class Game {
-  constructor(index = 0, onEvent = () => {}) {
+  constructor(index = 0, onEvent = () => {}, build = {}) {
     this.index = index;
-    this.level = LEVELS[index];
+    this.level = index === -1 ? SANDBOX : LEVELS[index];
+    this.stats = statsFor(build);
     this.onEvent = onEvent;
     this.p = {
       x: this.level.start[0],
@@ -34,6 +45,22 @@ export class Game {
     this.gateHintRemaining = 0;
     this.broken = 0;
     this.held = 0;
+    this.round = 0;
+    this.jumps = 0;
+    this.smashed = 0;
+    this.chain = 0;
+    this.bestChain = 0;
+    this.lastBreak = -100;
+    this.abilityCooldown = 0;
+    this.notice = this.level.subtitle;
+    this.noticeTime = 7;
+    this.crates = (this.level.crates || []).map(([x, y]) => ({
+      x,
+      y,
+      vx: 0,
+      vy: 0,
+      delivered: false,
+    }));
     this.collected = 0;
     this.blocks = this.level.blocks.map(([x, y]) => ({ x, y, alive: true }));
     this.nuts = (this.level.nuts || []).map(([x, y]) => ({
@@ -73,19 +100,50 @@ export class Game {
     let dx = x - p.x,
       dy = y - p.y;
     const d = Math.hypot(dx, dy) || 1;
-    p.vx = (dx / d) * 520;
-    p.vy = (dy / d) * 520;
+    p.vx = (dx / d) * this.stats.speed;
+    p.vy = (dy / d) * this.stats.speed;
     p.angle = Math.atan2(dy, dx);
     p.dash = 0.22;
-    p.cooldown = 1.1;
+    p.cooldown = this.stats.cooldown;
     this.emit("dash");
   }
+  ability() {
+    if (this.ended || this.abilityCooldown > 0) return;
+    if (this.stats.spring) {
+      this.p.jump = 0.7;
+      this.abilityCooldown = 3;
+      this.emit("dash");
+    } else if (this.p.cooldown <= 0) {
+      this.dash(
+        this.p.x + Math.cos(this.p.angle) * 100,
+        this.p.y + Math.sin(this.p.angle) * 100,
+      );
+      this.p.vx *= 1.2;
+      this.p.vy *= 1.2;
+      this.abilityCooldown = 3;
+    }
+  }
+  get pad() {
+    return (this.level.pads || [[520, 300]])[this.round] || [520, 300];
+  }
+  get movingWall() {
+    return this.level.moving
+      ? [420, 190 + Math.sin(this.time * 0.9) * 75, 25, 140]
+      : null;
+  }
   damage() {
-    if (this.p.immune > 0 || this.p.jump > 0 || this.tutorial) return;
+    if (
+      this.p.immune > 0 ||
+      this.p.jump > 0 ||
+      this.tutorial ||
+      this.level.kind === "sandbox"
+    )
+      return;
     this.hits++;
     this.p.immune = 1.3;
     this.emit("hit");
-    if (this.hits >= 3) this.finish(false, "Your toy took three hits.");
+    if (this.hits >= this.stats.hull)
+      this.finish(false, `Your toy took ${this.stats.hull} hits.`);
   }
   finish(won, reason) {
     if (this.ended) return;
@@ -97,6 +155,8 @@ export class Game {
   update(dt, input) {
     if (this.ended) return;
     this.gateHintRemaining = Math.max(0, this.gateHintRemaining - dt);
+    this.noticeTime = Math.max(0, this.noticeTime - dt);
+    this.abilityCooldown = Math.max(0, this.abilityCooldown - dt);
     const p = this.p;
     for (const q of this.particles) {
       if (q.life > 0) {
@@ -113,9 +173,12 @@ export class Game {
       let dx = input.x || 0,
         dy = input.y || 0;
       const d = Math.hypot(dx, dy) || 1;
-      p.vx += (dx / d) * 680 * dt;
-      p.vy += (dy / d) * 680 * dt;
-      const drag = Math.exp(-4.8 * dt);
+      p.vx += (dx / d) * this.stats.accel * dt;
+      p.vy += (dy / d) * this.stats.accel * dt;
+      const icy = (this.level.ice || []).some(
+        ([x, y, w, h]) => p.x > x && p.x < x + w && p.y > y && p.y < y + h,
+      );
+      const drag = Math.exp(-this.stats.drag * (icy ? 0.4 : 1) * dt);
       p.vx *= drag;
       p.vy *= drag;
       const speed = Math.hypot(p.vx, p.vy);
@@ -136,7 +199,10 @@ export class Game {
         p[axis === "x" ? "vx" : "vy"] *= -0.45;
         this.emit("hit");
       }
-    for (const [x, y, w, h] of this.level.walls) {
+    for (const [x, y, w, h] of [
+      ...this.level.walls,
+      ...(this.movingWall ? [this.movingWall] : []),
+    ]) {
       if (p.jump > 0) continue;
       const dx = p.x - clamp(p.x, x, x + w),
         dy = p.y - clamp(p.y, y, y + h),
@@ -166,6 +232,7 @@ export class Game {
       ) {
         p.jump = 0.7;
         this.rampTimer = 1.1;
+        this.jumps++;
         this.emit("reward");
       }
     if (this.tutorial) {
@@ -185,26 +252,41 @@ export class Game {
     }
     const kind = this.level.kind;
     if (kind === "race") {
-      const gate = this.level.gates[this.gate];
+      const localGate = this.gate % this.level.gates.length;
+      const gate = this.level.gates[localGate];
       if (gate && Math.hypot(p.x - gate[0], p.y - gate[1]) < 40) {
         this.gate++;
         this.gateHintRemaining = 0;
         this.emit("reward");
       } else if (
         this.level.gates.some(
-          ([x, y], i) => i > this.gate && Math.hypot(p.x - x, p.y - y) < 40,
+          ([x, y], i) =>
+            i > localGate &&
+            i !==
+              (localGate + this.level.gates.length - 1) %
+                this.level.gates.length &&
+            Math.hypot(p.x - x, p.y - y) < 40,
         )
       ) {
         this.gateHintRemaining = 1.5;
       }
-      if (this.gate === 5) this.finish(true, "All five gates crossed.");
+      if (this.gate === this.level.gates.length * this.level.laps)
+        this.finish(true, `All ${this.level.laps} laps crossed.`);
     }
-    if (kind === "capture") {
+    if (kind === "capture" || kind === "sandbox") {
       for (const b of this.blocks)
         if (b.alive && Math.hypot(p.x - b.x, p.y - b.y) < 34) {
           if (p.dash > 0 || Math.hypot(p.vx, p.vy) > 160) {
             b.alive = false;
             this.broken++;
+            this.chain = this.time - this.lastBreak <= 5 ? this.chain + 1 : 1;
+            this.lastBreak = this.time;
+            this.bestChain = Math.max(this.bestChain, this.chain);
+            if (this.chain >= 3) {
+              this.notice = `CHAIN ${this.chain} · paper toys cleared!`;
+              this.noticeTime = 1.8;
+              this.emit("chain", b.x, b.y);
+            }
             this.emit("reward", b.x, b.y);
           } else {
             const a = Math.atan2(p.y - b.y, p.x - b.x);
@@ -214,11 +296,72 @@ export class Game {
             p.vy *= -0.4;
           }
         }
-      if (this.broken === 8 && Math.hypot(p.x - 520, p.y - 300) < 55)
+      if (
+        this.blocks.every((b) => !b.alive) &&
+        Math.hypot(p.x - this.pad[0], p.y - this.pad[1]) < 55
+      )
         this.held += dt;
-      if (this.held >= 4) this.finish(true, "The desk belongs to you.");
+      if (kind === "capture" && this.held >= this.level.hold) {
+        this.round++;
+        if (this.round >= this.level.rounds)
+          this.finish(true, "Both rounds captured. The desk belongs to you.");
+        else {
+          this.held = 0;
+          this.blocks = this.level.blocks.map(([x, y]) => ({
+            x: 960 - x,
+            y: 590 - y,
+            alive: true,
+          }));
+          this.notice = "ROUND 2 · new toys, new capture pad";
+          this.noticeTime = 5;
+          this.emit("chain");
+        }
+      }
     }
-    if (kind === "survive") {
+    if (kind === "push" || kind === "sandbox") {
+      for (const b of this.crates) {
+        if (b.delivered) continue;
+        const dx = b.x - p.x,
+          dy = b.y - p.y,
+          d = Math.hypot(dx, dy) || 1;
+        if (d < 40) {
+          const overlap = 40 - d;
+          b.x += (dx / d) * overlap * 0.65;
+          b.y += (dy / d) * overlap * 0.65;
+          p.x -= (dx / d) * overlap * 0.35;
+          p.y -= (dy / d) * overlap * 0.35;
+          b.vx += p.vx * this.stats.mass * dt * 8;
+          b.vy += p.vy * this.stats.mass * dt * 8;
+        }
+        b.x = clamp(b.x + b.vx * dt, 85, 875);
+        b.y = clamp(b.y + b.vy * dt, 130, 455);
+        b.vx *= Math.exp(-4 * dt);
+        b.vy *= Math.exp(-4 * dt);
+        for (const [x, y, w, h] of [
+          ...this.level.walls,
+          ...(this.movingWall ? [this.movingWall] : []),
+        ]) {
+          const dx = b.x - clamp(b.x, x, x + w),
+            dy = b.y - clamp(b.y, y, y + h),
+            d = Math.hypot(dx, dy);
+          if (d < 23) {
+            b.x += (dx / (d || 1) || 1) * (23 - d);
+            b.y += (dy / (d || 1)) * (23 - d);
+            b.vx = b.vy = 0;
+          }
+        }
+        if (
+          Math.hypot(b.x - this.level.target[0], b.y - this.level.target[1]) <
+          65
+        ) {
+          b.delivered = true;
+          this.emit("reward", b.x, b.y);
+        }
+      }
+      if (kind === "push" && this.crates.every((b) => b.delivered))
+        this.finish(true, "Both cargo boxes packed into the bay.");
+    }
+    if (kind === "survive" || this.level.hazards) {
       this.spawn -= dt;
       if (this.spawn <= 0) {
         this.spawn += 1.5;
@@ -246,6 +389,7 @@ export class Game {
           else if (Math.hypot(p.x - m.x, p.y - m.y) < 30) {
             if (p.dash > 0) {
               m.active = false;
+              this.smashed++;
               this.emit("reward", m.x, m.y);
             } else this.damage();
           }
@@ -259,19 +403,23 @@ export class Game {
     }
     if (this.time >= this.level.limit && !this.ended)
       this.finish(
-        kind === "survive" && this.collected >= 4,
+        kind === "survive" && this.collected >= this.level.required,
         kind === "survive"
-          ? this.collected >= 4
+          ? this.collected >= this.level.required
             ? "You outlasted the marbles."
-            : "Time survived, but fewer than four nuts collected."
+            : `Time survived, but fewer than ${this.level.required} nuts collected.`
           : "Time ran out. Try a tighter route.",
       );
   }
   progress() {
     return this.level.kind === "race"
-      ? `Gates ${this.gate}/5${this.gate < 5 ? ` · Next: Gate ${this.gate + 1}` : ""}`
+      ? `Lap ${Math.min(this.level.laps, Math.floor(this.gate / this.level.gates.length) + 1)}/${this.level.laps} · Next Gate ${(this.gate % this.level.gates.length) + 1}`
       : this.level.kind === "capture"
-        ? `Toys ${this.broken}/8 · Pad ${this.held.toFixed(1)}/4s`
-        : `Nuts ${this.collected} · Goal 4`;
+        ? `Round ${Math.min(this.round + 1, this.level.rounds)}/${this.level.rounds} · Toys ${this.blocks.filter((b) => !b.alive).length}/${this.blocks.length} · Hold ${this.held.toFixed(1)}/${this.level.hold}s`
+        : this.level.kind === "push"
+          ? `Cargo ${this.crates.filter((b) => b.delivered).length}/2`
+          : this.level.kind === "sandbox"
+            ? "E: ability · P: parts · no score"
+            : `Nuts ${this.collected}/${this.level.required}`;
   }
 }

@@ -1,8 +1,9 @@
 import "./ui/style.css";
 import { LEVELS } from "../content/levels.js";
-import { Game, starsFor } from "./core/game.js";
+import { Game, starsFor, starConditions } from "./core/game.js";
+import { PARTS, totalStars } from "../content/builds.js";
 import { readSave, writeSave } from "./core/save.js";
-import { Synth } from "./audio/synth.js";
+import { AudioBank } from "./audio/bank.js";
 import { Renderer } from "./game/render.js";
 const $ = (id) => document.getElementById(id),
   canvas = $("arena"),
@@ -23,7 +24,10 @@ try {
 const loaded = readSave(storage),
   save = loaded.data;
 $("save-warning").textContent = loaded.warning;
-const audio = new Synth(save.muted),
+const audio = new AudioBank(
+    save,
+    (message) => ($("save-warning").textContent = message),
+  ),
   keys = new Set();
 let game = null,
   phase = "menu",
@@ -48,6 +52,11 @@ function mute() {
   audio.setMuted(save.muted);
   persist();
   $("mute").textContent = save.muted ? "Sound off" : "Sound on";
+  document
+    .querySelectorAll('[data-action="setting-mute"],[data-action="mute"]')
+    .forEach(
+      (node) => (node.textContent = save.muted ? "Sound off" : "Sound on"),
+    );
 }
 function menu() {
   phase = "menu";
@@ -57,12 +66,75 @@ function menu() {
   $("tutorial").hidden = true;
   $("drive-help").hidden = true;
   panel(
-    `<p class="ta-eyebrow">SMALL MACHINE / BIG DESK</p><h1>Toy Arena:<br>Desk Clash</h1><p>Drive a pocket-sized machine. Turn the work desk into your arena.</p><p>WASD / Arrows to drive · Mouse to aim · Click to dash</p><div class="ta-actions">${button("Play Tape Sprint", "play", true)}${button("Learn by driving", "tutorial")}${button(save.muted ? "Sound off" : "Sound on", "mute")}</div><div class="ta-levels">${LEVELS.map((l, i) => `<button data-action="level-${i}"><strong>0${i + 1} / ${l.name}</strong><span>${["Race the tape", "Break & capture", "Dodge & collect"][i]}</span><span>Best: ${save.stars[i]} / 3 stars</span></button>`).join("")}</div><p class="ta-eyebrow" style="margin-top:12px">${innerWidth < 650 ? "KEYBOARD AND MOUSE REQUIRED · LANDSCAPE RECOMMENDED" : "3 ORIGINAL ARENAS · NO ACCOUNT · NO ADS"}</p>`,
+    `<p class="ta-eyebrow">SMALL MACHINE / BIG DESK</p><h1>Toy Arena:<br>Desk Clash</h1><p>Drive, ram, jump and pack your way across ten handcrafted arenas.</p><p>WASD / Arrows: drive · Mouse / Click: dash · E: ability</p><p>${totalStars(save)} / 30 stars · Build: ${Object.keys(
+      PARTS,
+    )
+      .map((s) => PARTS[s][save.build[s]].name)
+      .join(
+        " / ",
+      )}</p><div class="ta-actions">${button("Play Tape Sprint", "play", true)}${button("Arenas", "arenas")}${button("Garage", "garage")}${button("Sandbox", "sandbox")}${button("Learn by driving", "tutorial")}${button("Settings & credits", "settings")}</div><p class="ta-eyebrow" style="margin-top:12px">KEYBOARD & MOUSE · NO ACCOUNT · NO ADS</p>`,
   );
 }
+function arenas() {
+  menu();
+  panel(
+    `<h2>Choose your arena</h2><p>${totalStars(save)} / 30 stars · Earn stars to unlock desks and parts. Stars are never spent.</p><div class="ta-levels">${LEVELS.map((l, i) => `<button data-action="level-${i}" ${totalStars(save) < l.unlock ? "disabled" : ""}><strong>${String(i + 1).padStart(2, "0")} / ${l.name}</strong><span>${l.scene} · ${l.kind} · ${l.limit}s</span><span>${l.goal}</span><span>${totalStars(save) < l.unlock ? `Locked · ${l.unlock} stars needed` : `Best ${save.stars[i]}/3 · ${save.records[i]?.toFixed(1) || "—"}s`}</span></button>`).join("")}</div><div class="ta-actions">${button("Back", "menu")}</div>`,
+  );
+}
+function garage(preserveScroll = false) {
+  const scrollTop = preserveScroll
+    ? $("overlay").firstElementChild?.scrollTop || 0
+    : 0;
+  menu();
+  panel(
+    `<h2>Build your machine</h2><p>Trade grip, weight and ability. Sandbox lets you try every part; arena parts unlock with stars.</p>${Object.entries(
+      PARTS,
+    )
+      .map(
+        ([slot, parts]) =>
+          `<h3>${slot.toUpperCase()}</h3><div class="ta-parts">${parts.map((p, i) => `<button data-action="part-${slot}-${i}" ${totalStars(save) < p.cost ? "disabled" : ""} aria-pressed="${save.build[slot] === i}"><strong>${p.name} ${save.build[slot] === i ? "/ equipped" : ""}</strong><span>${p.note}</span><span>${totalStars(save) < p.cost ? `${p.cost} stars required` : "Unlocked"}</span></button>`).join("")}</div>`,
+      )
+      .join(
+        "",
+      )}<div class="ta-actions">${button("Sandbox test", "sandbox", true)}${button("Back", "menu")}</div>`,
+  );
+  $("overlay").firstElementChild.scrollTop = scrollTop;
+}
+function settings() {
+  menu();
+  panel(
+    `<h2>Settings & credits</h2><label>Master volume <input id="volume" type="range" min="0" max="100" value="${Math.round(save.volume * 100)}"/> <output id="volume-value">${Math.round(save.volume * 100)}%</output></label><div class="ta-actions">${button(save.muted ? "Sound off" : "Sound on", "setting-mute")}${button(save.contrast ? "High contrast: on" : "High contrast: off", "contrast")}</div><h3>Keyboard & mouse</h3><p>WASD / Arrows: drive · Click / Space: dash · E: ram or jump · P / Esc: pause · R: retry · M: mute. Aim at a target before clicking. Ramps let you jump barriers. Numbered gates must be crossed in order.</p><p>Fullscreen is controlled by the host platform, not an in-game button.</p><h3>Audio credits</h3><p>Music: “Candy” by Abstraction / Tallbeard Studios, Three Red Hearts (CC0). SFX: Kenney Impact Sounds & Music Jingles (CC0). Source links and full license notices ship in THIRD_PARTY_NOTICES.txt.</p><div class="ta-actions">${button("Back", "menu")}</div>`,
+  );
+}
+$("overlay").addEventListener("input", (e) => {
+  if (e.target.id === "volume") {
+    save.volume = Number(e.target.value) / 100;
+    audio.setVolume(save.volume);
+    $("volume-value").textContent = `${e.target.value}%`;
+    persist();
+  }
+});
+function testParts() {
+  const scrollTop = $("overlay").firstElementChild?.scrollTop || 0;
+  game.testBuild ??= { ...save.build };
+  panel(
+    `<h2>Sandbox parts</h2><p>Every part is available here. Test-only choices do not unlock arena parts.</p>${Object.entries(
+      PARTS,
+    )
+      .map(
+        ([slot, parts]) =>
+          `<h3>${slot.toUpperCase()}</h3><div class="ta-parts">${parts.map((p, i) => `<button data-action="test-${slot}-${i}" aria-pressed="${game.testBuild[slot] === i}"><strong>${p.name}${game.testBuild[slot] === i ? " / testing" : ""}</strong><span>${p.note}</span></button>`).join("")}</div>`,
+      )
+      .join(
+        "",
+      )}<div class="ta-actions">${button("Resume", "resume", true)}</div>`,
+  );
+  $("overlay").firstElementChild.scrollTop = scrollTop;
+}
 async function start(index, tutorial = false) {
-  await audio.unlock();
-  game = new Game(index, (kind) => audio.effect(kind));
+  audio.setActive(false);
+  audio.unlock();
+  game = new Game(index, (kind) => audio.effect(kind), save.build);
   game.tutorial = tutorial;
   phase = "playing";
   resultShown = false;
@@ -92,7 +164,7 @@ function teach() {
     ],
     [
       "Gate crossed. Toy broken. You are ready.",
-      "Next: cross five numbered gates before 60 seconds.",
+      "Next: four laps, five gates each, before 90 seconds.",
     ],
   ];
   const [title, sub] = details[tutorialStep];
@@ -106,16 +178,20 @@ function skip() {
 }
 function hud() {
   if (!game) return;
-  $("level-name").textContent = `0${game.index + 1} / ${game.level.name}`;
+  $("level-name").textContent =
+    `${game.index === -1 ? "TEST" : String(game.index + 1).padStart(2, "0")} / ${game.level.name}`;
   $("objective").textContent = game.tutorial
     ? "Practice: drive, then dash"
     : game.gateHintRemaining > 0
-      ? `Wrong order — Next: Gate ${game.gate + 1}`
-      : `${game.level.goal} · ${game.progress()}`;
+      ? `${game.progress()} · Wrong order`
+      : game.progress();
   $("timer").textContent = game.tutorial
     ? "PRACTICE"
-    : `${Math.max(0, Math.ceil(game.level.limit - game.time))}s`;
-  $("health").textContent = `Hull ${3 - game.hits}/3`;
+    : game.index === -1
+      ? "TEST"
+      : `${Math.max(0, Math.ceil(game.level.limit - game.time))}s`;
+  $("health").textContent =
+    `Hull ${game.stats.hull - game.hits}/${game.stats.hull} · E ${game.abilityCooldown > 0 ? Math.ceil(game.abilityCooldown) + "s" : "ready"}`;
 }
 function pause() {
   if (phase !== "playing") return;
@@ -123,12 +199,12 @@ function pause() {
   keys.clear();
   audio.setActive(false);
   panel(
-    `<p class="ta-eyebrow">ENGINE IDLE</p><h2>Paused</h2><p>The timer and marbles are stopped.</p><div class="ta-actions">${button("Resume", "resume", true)}${button("Retry", "retry")}${button("Arena", "menu")}</div>`,
+    `<p class="ta-eyebrow">ENGINE IDLE</p><h2>Paused</h2><p>The timer and marbles are stopped.</p><p>${game.level.goal}</p><div class="ta-actions">${button("Resume", "resume", true)}${button("Retry", "retry")}${game.index === -1 ? button("Test parts", "test-parts") : ""}${button("Garage", "garage")}${button("Arena", "menu")}</div>`,
   );
 }
 async function resume() {
   if (phase !== "paused") return;
-  await audio.unlock();
+  audio.unlock();
   phase = "playing";
   acc = 0;
   keys.clear();
@@ -140,33 +216,75 @@ function result() {
   keys.clear();
   $("tutorial").hidden = true;
   const stars = starsFor(game);
+  const before = totalStars(save);
+  const record =
+    game.won &&
+    (save.records[game.index] === null || game.time < save.records[game.index]);
+  if (record) save.records[game.index] = game.time;
   if (stars > save.stars[game.index]) {
     save.stars[game.index] = stars;
-    persist();
   }
-  const earned = [
-    game.won,
-    game.won &&
-      (game.level.kind === "survive"
-        ? game.hits === 0
-        : game.time <= (game.level.kind === "race" ? 35 : 40)),
-    game.won &&
-      (game.level.kind === "survive" ? game.collected === 6 : game.hits === 0),
-  ];
+  persist();
+  const earned = starConditions(game);
+  for (let i = 0; i < 3; i++)
+    if (earned[i])
+      setTimeout(
+        () => {
+          if (phase === "result") audio.effect("reward");
+        },
+        150 + i * 220,
+      );
+  const unlocked = LEVELS.filter(
+    (l) => l.unlock > before && l.unlock <= totalStars(save),
+  ).map((l) => l.name);
+  const nextLocked = LEVELS.find((l) => l.unlock > totalStars(save));
+  if (record) audio.effect("record");
   panel(
-    `<p class="ta-eyebrow">${game.won ? "ARENA COMPLETE" : "TRY AGAIN"}</p><h2>${game.won ? `${stars} / 3 stars` : "A new line awaits."}</h2><p>${game.reason}</p><p>${game.time.toFixed(1)} seconds · ${game.hits} hits · Best ${save.stars[game.index]}/3</p><ul class="ta-medals">${game.level.medals.map((m, i) => `<li>${earned[i] ? "Earned" : "Not earned"} — ${m}</li>`).join("")}</ul><div class="ta-actions">${button("Retry", "retry", true)}${game.won && game.index < 2 ? button(`Next: ${LEVELS[game.index + 1].name}`, "next") : ""}${button("Arena", "menu")}</div>`,
+    `<p class="ta-eyebrow">${game.won ? "ARENA COMPLETE" : "TRY AGAIN"}</p><h2>${game.won ? `${stars} / 3 stars` : "A new line awaits."}</h2><p>${game.reason}</p>${record ? '<p class="ta-record">NEW RECORD</p>' : ""}<p>${game.time.toFixed(1)}s · ${game.hits} hits · ${game.jumps} ramp jumps · Best chain ${game.bestChain}</p><ul class="ta-medals">${game.level.medals.map((m, i) => `<li class="${earned[i] ? "ta-earned" : ""}" style="--ta-delay:${i * 150}ms"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>${earned[i] ? "Earned" : "Not earned"} — ${m}${!earned[i] && !game.won ? " (complete the arena first)" : ""}</li>`).join("")}</ul><p>${unlocked.length ? "Unlocked: " + unlocked.join(", ") : nextLocked ? `Next unlock: ${nextLocked.name} at ${nextLocked.unlock} total stars` : "All arenas unlocked!"}</p><div class="ta-actions">${button("Retry", "retry", true)}${game.won && game.index < LEVELS.length - 1 && totalStars(save) >= LEVELS[game.index + 1].unlock ? button(`Next: ${LEVELS[game.index + 1].name}`, "next") : ""}${button("Arenas", "arenas")}${button("Garage", "garage")}${button("Arena", "menu")}</div>`,
   );
   setTimeout(() => {
     if (phase === "result") audio.setActive(false);
-  }, 700);
+  }, 1800);
 }
 $("overlay").addEventListener("click", (e) => {
   const action = e.target.closest("button")?.dataset.action;
   if (!action) return;
   if (action === "play") start(0, !save.tutorialSeen);
   else if (action === "tutorial") start(0, true);
-  else if (action?.startsWith("level-")) start(Number(action.slice(6)));
-  else if (action === "mute") {
+  else if (action?.startsWith("level-")) {
+    const i = Number(action.slice(6));
+    if (totalStars(save) >= LEVELS[i].unlock) start(i);
+  } else if (action === "arenas") arenas();
+  else if (action === "garage") garage();
+  else if (action === "sandbox") start(-1);
+  else if (action === "settings") settings();
+  else if (action === "contrast") {
+    save.contrast = !save.contrast;
+    document.body.classList.toggle("ta-contrast", save.contrast);
+    persist();
+    settings();
+  } else if (action === "setting-mute") {
+    mute();
+    settings();
+  } else if (action.startsWith("part-")) {
+    const [, slot, value] = action.split("-");
+    const n = Number(value);
+    if (PARTS[slot][n].cost <= totalStars(save)) {
+      save.build[slot] = n;
+      persist();
+      garage(true);
+    }
+  } else if (action === "test-parts") {
+    testParts();
+  } else if (action.startsWith("test-")) {
+    const [, slot, n] = action.split("-");
+    game.testBuild ??= { ...save.build };
+    game.testBuild[slot] = Number(n);
+    const test = new Game(-1, () => {}, game.testBuild);
+    game.stats = test.stats;
+    game.p.cooldown = 0;
+    testParts();
+  } else if (action === "mute") {
     mute();
     menu();
   } else if (action === "resume") {
@@ -190,6 +308,7 @@ document.addEventListener("keydown", (e) => {
   if (e.repeat) return;
   keys.add(k);
   if (k === "m") mute();
+  if (k === "e" && phase === "playing") game.ability();
   if (k === "escape" || k === "p") phase === "paused" ? resume() : pause();
   if (k === "r" && game && phase !== "menu") start(game.index, game.tutorial);
   if (k === " " && phase === "playing")
@@ -256,7 +375,7 @@ function frame(now) {
       if (tutorialElapsed >= 30) {
         pause();
         panel(
-          `<p class="ta-eyebrow">PRACTICE PAUSED / NO PENALTY</p><h2>Ready for the race?</h2><p>Practice has paused after 30 seconds. You can start the race or keep learning at your own pace.</p><p>Cross five gates in order. WASD drives; click dashes toward your mouse.</p><div class="ta-actions">${button("Start race", "skip", true)}${button("Keep practising", "resume")}</div>`,
+          `<p class="ta-eyebrow">PRACTICE PAUSED / NO PENALTY</p><h2>Ready for the race?</h2><p>Practice has paused after 30 seconds. Start the race or keep learning at your own pace.</p><p>Four laps; five gates in order each lap. WASD drives; click dashes.</p><div class="ta-actions">${button("Start race", "skip", true)}${button("Keep practising", "resume")}</div>`,
         );
       }
     }
@@ -290,6 +409,20 @@ window.toyArena = {
     practiceBlock: game?.practiceBlock,
     stars: [...save.stars],
     muted: save.muted,
+    won: game?.won,
+    round: game?.round,
+    scene: game?.level.scene,
+    build: { ...save.build },
+    stats: game ? { ...game.stats } : null,
+    blocks: game?.blocks.map((b) => ({ ...b })),
+    crates: game?.crates.map((b) => ({ ...b })),
+    nuts: game?.nuts.map((b) => ({ ...b })),
+    movingWall: game?.movingWall,
+    abilityCooldown: game?.abilityCooldown,
+    jumps: game?.jumps,
+    smashed: game?.smashed,
+    volume: save.volume,
+    contrast: save.contrast,
     marbles: game?.marbles.filter((m) => m.active).length,
     cooldown: game?.p.cooldown,
     hazards: game?.marbles
@@ -297,6 +430,7 @@ window.toyArena = {
       .map(({ x, y, vx, vy, warning }) => ({ x, y, vx, vy, warning })),
   }),
 };
+document.body.classList.toggle("ta-contrast", save.contrast);
 menu();
 renderer.resize();
 requestAnimationFrame(frame);

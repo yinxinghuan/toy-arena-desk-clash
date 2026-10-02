@@ -81,6 +81,28 @@ export class Renderer {
       return;
     }
     const level = g.level;
+    if (level.scene !== "Workshop") {
+      rect(
+        c,
+        48,
+        102,
+        864,
+        384,
+        level.scene === "Drafting" ? "#d3e4e4" : "#e4d0a7",
+      );
+      text(c, level.scene.toUpperCase(), 800, 475, 14);
+    }
+    for (const [x, y, w, h] of level.ice || []) {
+      rect(c, x, y, w, h, "#b2dce2");
+      text(c, "ICE", x + w / 2, y + h / 2, 15);
+      for (let i = 0; i < w; i += 30) {
+        c.strokeStyle = "#348795";
+        c.beginPath();
+        c.moveTo(x + i, y + 8);
+        c.lineTo(x + i + 15, y + 18);
+        c.stroke();
+      }
+    }
     if (level.kind === "race") {
       c.strokeStyle = "#d1ba87";
       c.lineWidth = 45;
@@ -90,24 +112,34 @@ export class Renderer {
       for (const gate of level.gates) c.lineTo(...gate);
       c.stroke();
       c.setLineDash([]);
+      const next = g.gate % level.gates.length;
       level.gates.forEach(([x, y], i) => {
-        circle(c, x, y, 39, i < g.gate ? "#bed1b4" : paper);
-        c.strokeStyle = i === g.gate ? "#168c91" : "#9b865f";
-        c.lineWidth = i === g.gate ? 5 : 2;
+        circle(c, x, y, 39, i < next ? "#bed1b4" : paper);
+        c.strokeStyle = i === next ? "#168c91" : "#9b865f";
+        c.lineWidth = i === next ? 5 : 2;
         c.stroke();
         text(c, String(i + 1), x, y + 8, 24);
         rect(c, x - 41, y + 38, 82, 5, ink);
       });
     }
     if (level.kind === "capture") {
-      circle(c, 520, 300, 58, "#ffc857");
+      const [px, py] = g.pad;
+      circle(c, px, py, 58, "#ffc857");
       c.strokeStyle = ink;
       c.lineWidth = 3;
       c.stroke();
-      text(c, g.broken < 8 ? "BREAK 8" : "HOLD", 520, 295, 18);
-      text(c, `${g.held.toFixed(1)}s`, 520, 321, 20);
+      text(
+        c,
+        g.blocks.some((b) => b.alive)
+          ? `BREAK ${g.blocks.filter((b) => b.alive).length}`
+          : "HOLD",
+        px,
+        py - 5,
+        18,
+      );
+      text(c, `${g.held.toFixed(1)}s`, px, py + 21, 20);
     }
-    if (level.kind === "survive") {
+    if (level.kind === "survive" || level.hazards) {
       text(c, "KEEP MOVING", 480, 120, 14, "#8a744f");
       for (const n of g.nuts)
         if (n.alive) {
@@ -142,6 +174,27 @@ export class Renderer {
           c.lineWidth = 2;
           c.stroke();
         }
+    }
+    if (g.movingWall) {
+      const [x, y, w, h] = g.movingWall;
+      rect(c, x, y, w, h, "#df6350");
+      for (let k = 0; k < h; k += 20) {
+        rect(c, x, y + k, w, 5, paper);
+      }
+      text(c, "↕", x + w / 2, y - 8, 20);
+    }
+    if (level.target) {
+      const [x, y] = level.target;
+      c.strokeStyle = ink;
+      c.lineWidth = 4;
+      c.setLineDash([10, 7]);
+      c.strokeRect(x - 65, y - 65, 130, 130);
+      c.setLineDash([]);
+      text(c, "PACK", x, y - 75, 18);
+      for (const b of g.crates) {
+        block(c, b.x, b.y);
+        text(c, b.delivered ? "OK" : "PUSH", b.x, b.y + 5, 12);
+      }
     }
     for (const [x, y, w, h] of level.walls) {
       rect(c, x + 4, y + 5, w, h, "#c5ac82");
@@ -193,7 +246,7 @@ export class Renderer {
         rect(c, x, y, 12, 8, ink);
         rect(c, x + 3, y, 2, 8, "#718081");
       }
-    c.fillStyle = "#168c91";
+    c.fillStyle = g.stats.mass > 1 ? "#ba7736" : "#168c91";
     c.beginPath();
     c.roundRect(-22, -13, 44, 26, 10);
     c.fill();
@@ -214,7 +267,7 @@ export class Renderer {
         p.y,
         29,
         -Math.PI / 2,
-        -Math.PI / 2 + Math.PI * 2 * (1 - p.cooldown / 1.1),
+        -Math.PI / 2 + Math.PI * 2 * (1 - p.cooldown / g.stats.cooldown),
       );
       c.stroke();
     }
@@ -225,5 +278,9 @@ export class Renderer {
           rect(c, q.x, q.y, 5, 5, q.kind === "hit" ? "#df6350" : "#ffc857");
         }
     c.globalAlpha = 1;
+    if (g.noticeTime > 0 && !g.tutorial) {
+      rect(c, 80, 497, 800, 20, paper);
+      text(c, g.notice, 480, 512, 13);
+    }
   }
 }
