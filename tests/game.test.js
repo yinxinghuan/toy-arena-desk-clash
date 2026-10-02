@@ -37,6 +37,8 @@ test("race only accepts sequential gates and awards independent stars", () => {
   g.p.y = 170;
   g.update(1 / 60, {});
   assert.equal(g.gate, 0);
+  assert.ok(g.gateHintRemaining > 0);
+  assert.ok(g.progress().includes("Next: Gate 1"));
   for (const [x, y] of g.level.gates) {
     g.p.x = x;
     g.p.y = y;
@@ -44,6 +46,7 @@ test("race only accepts sequential gates and awards independent stars", () => {
     g.update(1 / 60, {});
   }
   assert.ok(g.won);
+  assert.equal(g.gateHintRemaining, 0);
   assert.equal(starsFor(g), 3);
   g.time = 40;
   assert.equal(starsFor(g), 2);

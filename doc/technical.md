@@ -19,7 +19,7 @@
 
 60Hz固定步长，帧间差封顶100ms、每帧最多6步；时间跟模拟走而非后台墙钟。粒子96/滚珠12池，Canvas DPR封顶1.5。移动车以屏幕方向加速，dash指向鼠标；碰撞反弹/跳台空中免伤，顺序门/碎块占点/生存螺帽分别独立目标。
 
-`menu → safe tutorial / playing → paused → result` 明确状态。教程30秒安全暂停，玩家可继续或进入首局，不宣称学会；失焦暂停模拟和音频，主动恢复。原生localStorage是独立站点唯一存储；key `toy-arena-desk-clash:v1`，错误英文非阻断，最佳星仅增加。无云存档。
+`menu → safe tutorial / playing → paused → result` 明确状态。教程30秒安全暂停，玩家可继续或进入首局，不宣称学会；失焦暂停模拟和音频，主动恢复。除了blur/visibilitychange/pagehide事件，还在每次模拟前与独立200ms检查document.hasFocus/visibility，兜底事件漏发，不在焦点返回时自动恢复。顺序门HUD始终显示下一门，接触后续错序门显示1.5秒英文反馈且不计进度。原生localStorage是独立站点唯一存储；key `toy-arena-desk-clash:v1`，错误英文非阻断，最佳星仅增加。无云存档。
 
 音乐96BPM、312.5ms八分音符节拍，64步循环，最多12音符；手势解锁、失败不阻断、暂停停止当前声部，静音即时并持久。资产全部程序化原创，无远程素材请求。固定 `base:'./'`，可以静态子路径部署。
 

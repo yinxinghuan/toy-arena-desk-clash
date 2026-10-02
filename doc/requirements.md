@@ -22,7 +22,7 @@ WASD/箭头为屏幕方向驾驶；加速度 680 单位/秒²，速度上限 250
 
 ## 4. Controls
 
-WASD/方向键移动，鼠标瞄准、左键按下冲撞；Space 前冲；Esc/P 暂停，R 重试，M 静音。暂停、结果、菜单不接受游戏动作。失焦自动暂停，恢复需主动操作。英文按钮可用键盘 Tab/Enter；菜单 Tutorial 重看。
+WASD/方向键移动，鼠标瞄准、左键按下冲撞；Space 前冲；Esc/P 暂停，R 重试，M 静音。暂停、结果、菜单不接受游戏动作。失焦自动暂停，恢复需主动操作。顺序门始终标出下一门，接触后续错序门提示“Wrong order — Next: Gate N”1.5秒，不惩罚、不计进度。英文按钮可用键盘 Tab/Enter；菜单 Tutorial 重看。
 
 ## 5. Win / Lose Conditions
 

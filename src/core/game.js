@@ -31,6 +31,7 @@ export class Game {
     this.time = 0;
     this.hits = 0;
     this.gate = 0;
+    this.gateHintRemaining = 0;
     this.broken = 0;
     this.held = 0;
     this.collected = 0;
@@ -95,6 +96,7 @@ export class Game {
   }
   update(dt, input) {
     if (this.ended) return;
+    this.gateHintRemaining = Math.max(0, this.gateHintRemaining - dt);
     const p = this.p;
     for (const q of this.particles) {
       if (q.life > 0) {
@@ -186,7 +188,14 @@ export class Game {
       const gate = this.level.gates[this.gate];
       if (gate && Math.hypot(p.x - gate[0], p.y - gate[1]) < 40) {
         this.gate++;
+        this.gateHintRemaining = 0;
         this.emit("reward");
+      } else if (
+        this.level.gates.some(
+          ([x, y], i) => i > this.gate && Math.hypot(p.x - x, p.y - y) < 40,
+        )
+      ) {
+        this.gateHintRemaining = 1.5;
       }
       if (this.gate === 5) this.finish(true, "All five gates crossed.");
     }
@@ -260,7 +269,7 @@ export class Game {
   }
   progress() {
     return this.level.kind === "race"
-      ? `Gates ${this.gate}/5`
+      ? `Gates ${this.gate}/5${this.gate < 5 ? ` · Next: Gate ${this.gate + 1}` : ""}`
       : this.level.kind === "capture"
         ? `Toys ${this.broken}/8 · Pad ${this.held.toFixed(1)}/4s`
         : `Nuts ${this.collected} · Goal 4`;

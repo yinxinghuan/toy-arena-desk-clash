@@ -2,3 +2,5 @@ node_modules/
 dist/
 .DS_Store
 _qa/video/stress/
+# Native-window evidence includes unrelated browser tabs/bookmarks; keep local.
+_qa/coordination/native-unattached-tab-paused.jpg

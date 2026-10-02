@@ -109,7 +109,9 @@ function hud() {
   $("level-name").textContent = `0${game.index + 1} / ${game.level.name}`;
   $("objective").textContent = game.tutorial
     ? "Practice: drive, then dash"
-    : `${game.level.goal} · ${game.progress()}`;
+    : game.gateHintRemaining > 0
+      ? `Wrong order — Next: Gate ${game.gate + 1}`
+      : `${game.level.goal} · ${game.progress()}`;
   $("timer").textContent = game.tutorial
     ? "PRACTICE"
     : `${Math.max(0, Math.ceil(game.level.limit - game.time))}s`;
@@ -211,11 +213,23 @@ canvas.addEventListener("pointerdown", (e) => {
   game.dash(aim.x, aim.y);
 });
 window.addEventListener("blur", pause);
+window.addEventListener("pagehide", pause);
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) pause();
 });
+// Event-only lifecycle handling can miss a native tab/window switch. Check
+// authoritative focus before simulation, and independently while rAF is hidden.
+function enforcePageFocus() {
+  if (
+    phase === "playing" &&
+    (document.visibilityState !== "visible" || !document.hasFocus())
+  )
+    pause();
+}
+setInterval(enforcePageFocus, 200);
 new ResizeObserver(() => renderer.resize()).observe(canvas);
 function frame(now) {
+  enforcePageFocus();
   const delta = Math.min((now - last) / 1000, 0.1);
   last = now;
   if (phase === "playing") {
@@ -264,6 +278,9 @@ window.toyArena = {
     x: game?.p.x,
     y: game?.p.y,
     gate: game?.gate,
+    gateHintRemaining: game?.gateHintRemaining,
+    focused: document.hasFocus(),
+    visibility: document.visibilityState,
     broken: game?.broken,
     collected: game?.collected,
     held: game?.held,
