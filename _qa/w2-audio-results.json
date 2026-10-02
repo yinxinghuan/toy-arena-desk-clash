@@ -1,0 +1,33 @@
+{
+  "playing": {
+    "state": "running",
+    "peak": 0.14115282893180847,
+    "activeSources": 1,
+    "musicSources": 1
+  },
+  "muted": {
+    "state": "running",
+    "peak": 0,
+    "activeSources": 0,
+    "musicSources": 0
+  },
+  "restored": {
+    "state": "running",
+    "peak": 0.14115282893180847,
+    "activeSources": 1,
+    "musicSources": 1
+  },
+  "paused": {
+    "state": "running",
+    "peak": 0,
+    "activeSources": 0,
+    "musicSources": 0
+  },
+  "retried": {
+    "state": "running",
+    "peak": 0.14115282893180847,
+    "activeSources": 1,
+    "musicSources": 1
+  },
+  "note": "W2 licensed buffer audio: measured real WebAudio output graph, not a human listening test. Playwright WebM contains video only."
+}

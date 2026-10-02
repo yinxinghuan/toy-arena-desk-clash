@@ -1,53 +1,52 @@
 # Toy Arena: Desk Clash
 
-An original CrazyGames-native desktop prototype by yinxinghuan. MIT licensed.
-Not an AlterU port or a Toy Rampage reskin. No accounts, ads, downloads, remote
-assets or backend are required. All product text is English.
+An original keyboard-and-mouse desktop toy vehicle game by yinxinghuan.
+Game code/art/layouts: MIT. Music: Candy by Abstraction / Tallbeard Studios (CC0);
+SFX: Kenney Impact Sounds and Music Jingles (CC0). Full sources, fixed versions,
+file mappings and licenses: public/THIRD_PARTY_NOTICES.txt and public/audio/.
+Not an AlterU port or Toy Rampage reskin. English UI. No ads/accounts/backend.
 
 ## Run
 
-Requires Node.js 18+.
-
+Node.js 18+ (browser QA needs Node20+ and Playwright/Chromium).
 ```sh
 npm ci
-npm run dev -- --port 5186
+npm run dev -- --port 4190
 npm test
 npm run build
-npm run preview -- --port 4186
+npm run preview -- --port 4191
 ```
+Vite base './', portable static subpaths. Nothing is publicly deployed or submitted
+to CrazyGames by this W2 delivery. Fullscreen belongs to the host container.
 
-Open the printed URL in a keyboard-and-mouse browser. The production `dist/`
-uses relative paths and works under an arbitrary static subpath.
+## W2–3
 
-WASD / arrows drive; mouse aims; left click dashes; Space dashes forward.
-P / Escape pauses; R retries; M toggles persistent mute. Blur pauses the game.
-The safe practice tutorial can be skipped and replayed from the arena menu.
+Ten handcrafted arenas: ordered racing, break-and-capture, collect-and-survive,
+cargo pushing, then ice/moving-barrier/hazard combinations. First race has four
+laps; first capture has two rounds with different pad/toy locations.
+Three independent stars per arena, saved best time, star-gated challenges
+and three desk themes. Tyres, frame and module have actual grip/mass/push/hull/
+ability tradeoffs. Sandbox has unlimited safe practice and all test-only parts.
 
-## W0–1 scope
+WASD / arrows drive; mouse aims; click / Space dashes; E uses ram or jump.
+P / Esc pauses, R retries, M mutes. Focus loss pauses; return never auto-resumes.
+Learn by driving can be skipped/replayed. Settings include volume/contrast/help/
+credits. Local save v2 preserves v1 stars/mute/tutorial and reports English
+recovery guidance on broken/unavailable storage.
 
-Three authored arenas: Tape Sprint (ordered checkpoints), Stampede Station
-(break paper toys then capture the pad), Marble Mayhem (survive and collect).
-Each has completion and two explicitly stated bonus-star conditions. Highest
-stars and mute/tutorial settings survive refresh; failed storage reports an
-English warning without blocking play.
+## Evidence and limits
 
-All Canvas2D artwork, layouts, WebAudio music and effects are original and
-commercial-safe. See `public/THIRD_PARTY_NOTICES.txt` and `LICENSE`. No third-party
-cross-stitch, models, music, fonts or game assets are used.
+See doc/qa-w2.md for current results, screenshots, performance and known gaps.
+doc/qa-w01.md is historical prototype evidence, not current pacing or audio.
+_qa/w2-campaign.mjs uses actual keyboard/mouse and earned star unlocks; no hidden
+game state setters. Tests may directly set simulation state only for unit coverage.
+Human first-use understanding, subjective feel/listening and real Chromebook
+hardware remain unverified. CPU throttling and agent driving are not those tests.
+No platform approval claim, multiplayer, editor, monetization or SDK yet.
 
-This is an internal playable prototype, not a commercial release or a platform
-approval claim. Unfamiliar-human comprehension and subjective driving feel are
-**unverified**. Do not expand W2–3 or submit to CrazyGames before review. No SDK,
-advertisements, full parts shop, extra vehicles, multiplayer or level editor
-are included. Prototype reference and technical notes are in `doc/`.
-
-Verified input runs: Tape Sprint 8.25s / 3 stars, Stampede Station 25.77s /
-3 stars, Marble Mayhem 45.02s / 2 stars. The first two are below the intended
-30–90 second pacing and need tuning before content expansion. Full results,
-known gaps and evidence paths are in `doc/qa-w01.md`.
-
-Browser harnesses in `_qa/` additionally require Node 20+ and an installed
-Playwright/Chromium runtime; they are not production dependencies. The checked-in
-JSON and screenshots were generated with real browser keyboard/mouse inputs.
-The WebM is visual evidence only, not an audio recording. Human first-use
-comprehension and listening quality are still unverified.
+```sh
+TOY_ARENA_URL=http://127.0.0.1:4191/ node _qa/w2-campaign.mjs
+TOY_ARENA_URL=http://127.0.0.1:4191/ node _qa/w2-audio.mjs
+TOY_ARENA_URL=http://127.0.0.1:4191/ node _qa/w2-performance.mjs
+```
+QA scripts require Playwright installed separately. WebM evidence is video-only.

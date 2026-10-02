@@ -1,0 +1,42 @@
+{
+  "build": "./assets/index-DPCQnm47.js",
+  "reports": [
+    {
+      "index": 0,
+      "name": "Tape Sprint",
+      "wallSeconds": 48.725,
+      "result": {
+        "phase": "result",
+        "won": true,
+        "time": 48.71666666666518,
+        "hits": 0,
+        "gate": 20,
+        "broken": 0,
+        "round": 0,
+        "collected": 0,
+        "stars": 2,
+        "crates": []
+      },
+      "note": "Real keyboard/mouse, snapshot reads only"
+    },
+    {
+      "index": 1,
+      "name": "Stampede Station",
+      "wallSeconds": 48.116,
+      "result": {
+        "phase": "result",
+        "won": true,
+        "time": 48.06666666666522,
+        "hits": 0,
+        "gate": 0,
+        "broken": 16,
+        "round": 2,
+        "collected": 0,
+        "stars": 3,
+        "crates": []
+      },
+      "note": "Real keyboard/mouse, snapshot reads only"
+    }
+  ],
+  "errors": []
+}

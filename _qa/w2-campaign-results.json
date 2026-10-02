@@ -1,0 +1,215 @@
+{
+  "reports": [
+    {
+      "index": 0,
+      "name": "Tape Sprint",
+      "wallSeconds": 48.876,
+      "result": {
+        "phase": "result",
+        "won": true,
+        "time": 48.81666666666518,
+        "hits": 0,
+        "gate": 20,
+        "broken": 0,
+        "round": 0,
+        "collected": 0,
+        "stars": 2,
+        "crates": []
+      },
+      "note": "Real keyboard/mouse, snapshot reads only"
+    },
+    {
+      "index": 1,
+      "name": "Stampede Station",
+      "wallSeconds": 44.797,
+      "result": {
+        "phase": "result",
+        "won": true,
+        "time": 44.71666666666541,
+        "hits": 0,
+        "gate": 0,
+        "broken": 16,
+        "round": 2,
+        "collected": 0,
+        "stars": 3,
+        "crates": []
+      },
+      "note": "Real keyboard/mouse, snapshot reads only"
+    },
+    {
+      "index": 2,
+      "name": "Marble Mayhem",
+      "wallSeconds": 45.016,
+      "result": {
+        "phase": "result",
+        "won": true,
+        "time": 45.016666666665394,
+        "hits": 1,
+        "gate": 0,
+        "broken": 0,
+        "round": 0,
+        "collected": 6,
+        "stars": 2,
+        "crates": []
+      },
+      "note": "Real keyboard/mouse, snapshot reads only"
+    },
+    {
+      "index": 3,
+      "name": "Cargo Corner",
+      "wallSeconds": 28.634,
+      "result": {
+        "phase": "result",
+        "won": true,
+        "time": 28.333333333333005,
+        "hits": 0,
+        "gate": 0,
+        "broken": 0,
+        "round": 0,
+        "collected": 0,
+        "stars": 3,
+        "crates": [
+          {
+            "x": 703.1426772600374,
+            "y": 381.89889419211624,
+            "vx": 74.82598792101741,
+            "vy": -71.76402056245188,
+            "delivered": true
+          },
+          {
+            "x": 713.3675114313036,
+            "y": 388.05674520326323,
+            "vx": 85.56310063645911,
+            "vy": -78.10786166319579,
+            "delivered": true
+          }
+        ]
+      },
+      "note": "Real keyboard/mouse, snapshot reads only"
+    },
+    {
+      "index": 4,
+      "name": "Ice Ribbon",
+      "wallSeconds": 36.98,
+      "result": {
+        "phase": "result",
+        "won": true,
+        "time": 36.96666666666585,
+        "hits": 0,
+        "gate": 15,
+        "broken": 0,
+        "round": 0,
+        "collected": 0,
+        "stars": 2,
+        "crates": []
+      },
+      "note": "Real keyboard/mouse, snapshot reads only"
+    },
+    {
+      "index": 5,
+      "name": "Nut Circuit",
+      "wallSeconds": 50.064,
+      "result": {
+        "phase": "result",
+        "won": true,
+        "time": 50.01666666666511,
+        "hits": 0,
+        "gate": 0,
+        "broken": 0,
+        "round": 0,
+        "collected": 6,
+        "stars": 3,
+        "crates": []
+      },
+      "note": "Real keyboard/mouse, snapshot reads only"
+    },
+    {
+      "index": 6,
+      "name": "Moving Day",
+      "wallSeconds": 70.272,
+      "result": {
+        "phase": "result",
+        "won": true,
+        "time": 69.86666666666399,
+        "hits": 0,
+        "gate": 0,
+        "broken": 0,
+        "round": 0,
+        "collected": 0,
+        "stars": 3,
+        "crates": [
+          {
+            "x": 686.3224569212618,
+            "y": 320.8266082495568,
+            "vx": 83.30153112513067,
+            "vy": -80.58277912738457,
+            "delivered": true
+          },
+          {
+            "x": 743.3872664709089,
+            "y": 373.4986966008712,
+            "vx": 85.04746751142147,
+            "vy": -86.50337675336847,
+            "delivered": true
+          }
+        ]
+      },
+      "note": "Real keyboard/mouse, snapshot reads only"
+    },
+    {
+      "index": 7,
+      "name": "Double Trouble",
+      "wallSeconds": 57.293,
+      "result": {
+        "phase": "result",
+        "won": false,
+        "time": 57.2666666666647,
+        "hits": 3,
+        "gate": 0,
+        "broken": 16,
+        "round": 1,
+        "collected": 0,
+        "stars": 0,
+        "crates": []
+      },
+      "note": "Real keyboard/mouse, snapshot reads only"
+    },
+    {
+      "index": 8,
+      "name": "Packing Slalom",
+      "wallSeconds": 45.802,
+      "result": {
+        "phase": "result",
+        "won": true,
+        "time": 45.749999999998685,
+        "hits": 0,
+        "gate": 15,
+        "broken": 0,
+        "round": 0,
+        "collected": 0,
+        "stars": 3,
+        "crates": []
+      },
+      "note": "Real keyboard/mouse, snapshot reads only"
+    },
+    {
+      "index": 9,
+      "name": "Last Desk Standing",
+      "wallSeconds": 60.114,
+      "result": {
+        "phase": "result",
+        "won": true,
+        "time": 60.01666666666454,
+        "hits": 1,
+        "gate": 0,
+        "broken": 0,
+        "round": 0,
+        "collected": 6,
+        "stars": 2,
+        "crates": []
+      },
+      "note": "Real keyboard/mouse, snapshot reads only"
+    }
+  ],
+  "errors": []
+}

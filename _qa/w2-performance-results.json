@@ -1,0 +1,47 @@
+{
+  "firstScreen": [
+    {
+      "url": "",
+      "size": 1676
+    },
+    {
+      "url": "assets/index-DbE8CZ6e.css",
+      "size": 4358
+    },
+    {
+      "url": "assets/index-tWIpMpmD.js",
+      "size": 35579
+    }
+  ],
+  "totalUncompressed": 41613,
+  "audioBeforeGesture": false,
+  "cpuThrottle": 4,
+  "timing": {
+    "frames": 600,
+    "median": 8.300000000000182,
+    "p95": 15.400000000000091,
+    "p99": 18.099999999999454,
+    "max": 18.699999999999818
+  },
+  "clipping": [
+    {
+      "text": "Pause",
+      "x": 436.859375,
+      "y": 6,
+      "w": 80.421875,
+      "h": 44,
+      "inside": true
+    },
+    {
+      "text": "Sound on",
+      "x": 523.28125,
+      "y": 6,
+      "w": 104.71875,
+      "h": 44,
+      "inside": true
+    }
+  ],
+  "iframe": "actual production iframe, 640x360",
+  "realChromebook": "unavailable; desktop Chrome CPU throttling is only a proxy",
+  "errors": []
+}

@@ -1,30 +1,30 @@
-# Technical
+# Technical — W2–3
 
 ## 1. 技术栈
 
-独立 Vanilla JavaScript ES modules + Vite 6.4.3 + Canvas2D，DOM菜单与 WebAudio；没有运行时外部依赖、账号、后台或平台SDK。16:9桌面英文产品，不属于AlterU宿主构建。
+独立Vanilla JavaScript ES modules + Vite6.4.3 + Canvas2D、DOM和WebAudio。零运行时库，英文16:9桌面键鼠，不是AlterU宿主构建，无SDK/后台/广告/账号。本轮不公开部署、不提交平台。
 
 ## 2. 目录结构
 
-- `content/levels.js`：3个原创地图、规则种类、星级文案。
-- `src/core/game.js`：可单测模拟、固定资源池、碰撞/坡道/目标/结算。
-- `src/core/save.js`：版本1的存档验证和失败回退。
-- `src/game/render.js`：原创车/桌面/目标/粒子，静态背景预绘。
-- `src/ui/style.css`：内部响应DOM，800×450最小主要目标。
-- `src/audio/synth.js`：原创循环旋律与短音效。
-- `src/main.js`：按键/鼠标、屏幕状态、教学、暂停、存档协调。
-- `tests/`：规则单测；`_qa/`：真实键鼠浏览器路径与截图。
+- content/levels.js：10关+Sandbox、地图、目标/解锁/独立星规则。
+- content/builds.js：轮胎/车架/模块与解锁代价、实际物理配置。
+- src/core/game.js：固定步模拟、碰撞/坡道/油滑/推货/移动挡板/顺序门/抢点/生存/星。
+- src/core/save.js：v2正规化、v1迁移、存储错误英文回退。
+- src/game/render.js：Canvas2D原创几何、缓存木纹、目标/机关/VFX。
+- src/audio/bank.js：本地授权录音解码播放；public/audio：音乐/音效与许可。
+- src/main.js：键鼠、状态、菜单/车库/设置/教程、读写存档。
+- src/ui/style.css：内部滚动响应菜单；tests：纯规则；_qa：真实输入及截图。
 
 ## 3. 核心模块
 
-60Hz固定步长，帧间差封顶100ms、每帧最多6步；时间跟模拟走而非后台墙钟。粒子96/滚珠12池，Canvas DPR封顶1.5。移动车以屏幕方向加速，dash指向鼠标；碰撞反弹/跳台空中免伤，顺序门/碎块占点/生存螺帽分别独立目标。
+60Hz固定步，帧间差≤100ms、最多6步/帧；粒子96、滚珠12、8纸块、2货箱，DPR≤1.5。木纹缓存，零下载纹理。目标视图由同一模拟状态绘制。货箱圆形近似接触推力与质量有关，摩擦衰减；交付冻结以避免已送达箱堵住玩家。移动挡板位置由模拟时间正弦确定，暂停即冻结。油滑降低当前摩擦至40%。
 
-`menu → safe tutorial / playing → paused → result` 明确状态。教程30秒安全暂停，玩家可继续或进入首局，不宣称学会；失焦暂停模拟和音频，主动恢复。除了blur/visibilitychange/pagehide事件，还在每次模拟前与独立200ms检查document.hasFocus/visibility，兜底事件漏发，不在焦点返回时自动恢复。顺序门HUD始终显示下一门，接触后续错序门显示1.5秒英文反馈且不计进度。原生localStorage是独立站点唯一存储；key `toy-arena-desk-clash:v1`，错误英文非阻断，最佳星仅增加。无云存档。
+状态menu/tutorial/playing/paused/result。失焦事件及200ms+模拟前检查暂停，无自动恢复。Sandbox安全无星无失败，测试锁定零件只更新当前实例，不写入竞技配置。原生localStorage key toy-arena-desk-clash:v1保持不变、内容升级version2：十关星/最佳用时、配置、音量/静音/高对比/教学。旧三关星继续保留，损坏数值逐项正规化。星数只增不减，解锁不花费星。
 
-音乐96BPM、312.5ms八分音符节拍，64步循环，最多12音符；手势解锁、失败不阻断、暂停停止当前声部，静音即时并持久。资产全部程序化原创，无远程素材请求。固定 `base:'./'`，可以静态子路径部署。
+音频首次手势resume AudioContext后异步加载本地Ogg/解码，驾驶不等待网络。8短音+1背景，碰撞120ms限频，gain主音量与静音；暂停stop全部声源，恢复一条52.173787s完整循环。文件来源/固定版本/映射见THIRD_PARTY_NOTICES和原始许可。无实时振荡器回退，加载失败英文提示。
 
-`window.toyArena.snapshot()`只读诊断，不含完成/移位/作弊接口。浏览器QA读取状态来决定键鼠动作；单测直接设置状态用于规则覆盖，不被当作真实试玩。
+window.toyArena.snapshot只读，无移位/完成/存档作弊接口。浏览器自动化读取状态选择真实按键/鼠标，纯单测直接状态写入只算规则覆盖，不能算试玩。base './'支持子路径；全屏交由宿主，不调用自制fullscreen。
 
 ## 4. 扩展点
 
-规则/参数在core，地图/目标文案在content，绘图在renderer，声音在synth，菜单/输入在main。W2–3零件、成长、sandbox和更多关卡仍未实现；须先真人手感/首30秒验收。平台SDK、正式海报/视频、CrazyGames提交均不在本原型交付范围。正式平台检查另行复核官方要求，原型测试不承诺审核。
+地图/目标/星/解锁在levels；零件数值在builds；碰撞与新规则在core；几何与低成本反馈在render；音频在bank及许可映射；UI/教学/输入在main。性能预算首屏gzip≤100KB、音频≤3MB、零纹理、既有池上限。真实Chromebook、人工听感、陌生真人理解另验，自动化与节流不能替代。

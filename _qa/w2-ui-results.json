@@ -1,0 +1,59 @@
+{
+  "reports": [
+    {
+      "case": "settings-reload",
+      "snapshot": {
+        "phase": "menu",
+        "focused": true,
+        "visibility": "visible",
+        "stars": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "muted": true,
+        "build": {
+          "tyres": 0,
+          "frame": 0,
+          "module": 0
+        },
+        "stats": null,
+        "volume": 0.35,
+        "contrast": true
+      }
+    },
+    {
+      "width": 640,
+      "height": 360,
+      "horizontalOverflow": false
+    },
+    {
+      "width": 907,
+      "height": 510,
+      "horizontalOverflow": false
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "horizontalOverflow": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "horizontalOverflow": false
+    },
+    {
+      "case": "denied-save",
+      "warning": "Saving is unavailable. You can still play; progress will last only this session."
+    }
+  ],
+  "errors": [],
+  "video": "video-only; not sound evidence"
+}

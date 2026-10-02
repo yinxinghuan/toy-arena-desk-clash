@@ -1,0 +1,288 @@
+{
+  "reports": [
+    {
+      "case": "race-real-input",
+      "snapshot": {
+        "phase": "result",
+        "index": 0,
+        "time": 38.79999999999908,
+        "x": 709.1827885789858,
+        "y": 437.3556626738197,
+        "gate": 20,
+        "gateHintRemaining": 0,
+        "focused": true,
+        "visibility": "visible",
+        "broken": 0,
+        "collected": 0,
+        "held": 0,
+        "hits": 0,
+        "tutorial": false,
+        "practiceGate": false,
+        "practiceBlock": false,
+        "stars": [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "muted": false,
+        "won": true,
+        "round": 0,
+        "scene": "Workshop",
+        "build": {
+          "tyres": 0,
+          "frame": 0,
+          "module": 0
+        },
+        "stats": {
+          "name": "Ram",
+          "cost": 0,
+          "note": "520 dash · 1.1s recharge · E: reinforced ram",
+          "accel": 680,
+          "drag": 4.8,
+          "mass": 1,
+          "hull": 3,
+          "speed": 520,
+          "cooldown": 1.1,
+          "spring": false
+        },
+        "blocks": [],
+        "crates": [],
+        "nuts": [],
+        "movingWall": null,
+        "marbles": 0,
+        "cooldown": 0,
+        "hazards": []
+      }
+    },
+    {
+      "case": "capture-real-input",
+      "snapshot": {
+        "phase": "result",
+        "index": 1,
+        "time": 90.01666666666284,
+        "x": 749.8202791953843,
+        "y": 433.54233775288196,
+        "gate": 0,
+        "gateHintRemaining": 0,
+        "focused": true,
+        "visibility": "visible",
+        "broken": 15,
+        "collected": 0,
+        "held": 0,
+        "hits": 0,
+        "tutorial": false,
+        "practiceGate": false,
+        "practiceBlock": false,
+        "stars": [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "muted": false,
+        "won": false,
+        "round": 1,
+        "scene": "Workshop",
+        "build": {
+          "tyres": 0,
+          "frame": 0,
+          "module": 0
+        },
+        "stats": {
+          "name": "Ram",
+          "cost": 0,
+          "note": "520 dash · 1.1s recharge · E: reinforced ram",
+          "accel": 680,
+          "drag": 4.8,
+          "mass": 1,
+          "hull": 3,
+          "speed": 520,
+          "cooldown": 1.1,
+          "spring": false
+        },
+        "blocks": [
+          {
+            "x": 715,
+            "y": 430,
+            "alive": true
+          },
+          {
+            "x": 645,
+            "y": 190,
+            "alive": false
+          },
+          {
+            "x": 510,
+            "y": 450,
+            "alive": false
+          },
+          {
+            "x": 420,
+            "y": 390,
+            "alive": false
+          },
+          {
+            "x": 330,
+            "y": 440,
+            "alive": false
+          },
+          {
+            "x": 160,
+            "y": 190,
+            "alive": false
+          },
+          {
+            "x": 240,
+            "y": 320,
+            "alive": false
+          },
+          {
+            "x": 460,
+            "y": 180,
+            "alive": false
+          }
+        ],
+        "crates": [],
+        "nuts": [],
+        "movingWall": null,
+        "marbles": 0,
+        "cooldown": 0,
+        "hazards": []
+      }
+    },
+    {
+      "case": "sandbox-parts",
+      "snapshot": {
+        "phase": "playing",
+        "index": -1,
+        "time": 0.03333333333333333,
+        "x": 130,
+        "y": 390,
+        "gate": 0,
+        "gateHintRemaining": 0,
+        "focused": true,
+        "visibility": "visible",
+        "broken": 0,
+        "collected": 0,
+        "held": 0,
+        "hits": 0,
+        "tutorial": false,
+        "practiceGate": false,
+        "practiceBlock": false,
+        "stars": [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "muted": false,
+        "won": false,
+        "round": 0,
+        "scene": "Workshop",
+        "build": {
+          "tyres": 0,
+          "frame": 0,
+          "module": 0
+        },
+        "stats": {
+          "name": "Spring",
+          "cost": 5,
+          "note": "420 dash · 1.4s recharge · E: 0.7s jump / 3s recharge",
+          "accel": 544,
+          "drag": 4.8,
+          "mass": 1.8,
+          "hull": 4,
+          "speed": 420,
+          "cooldown": 1.4,
+          "spring": true
+        },
+        "blocks": [
+          {
+            "x": 400,
+            "y": 180,
+            "alive": true
+          },
+          {
+            "x": 760,
+            "y": 410,
+            "alive": true
+          }
+        ],
+        "crates": [
+          {
+            "x": 350,
+            "y": 350,
+            "vx": 0,
+            "vy": 0,
+            "delivered": false
+          },
+          {
+            "x": 620,
+            "y": 220,
+            "vx": 0,
+            "vy": 0,
+            "delivered": false
+          }
+        ],
+        "nuts": [],
+        "movingWall": [
+          420,
+          192.24966251518717,
+          25,
+          140
+        ],
+        "marbles": 0,
+        "cooldown": 0,
+        "hazards": []
+      }
+    },
+    {
+      "case": "saved-settings-reload",
+      "snapshot": {
+        "phase": "menu",
+        "focused": true,
+        "visibility": "visible",
+        "stars": [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "muted": true,
+        "build": {
+          "tyres": 0,
+          "frame": 0,
+          "module": 0
+        },
+        "stats": null
+      }
+    }
+  ],
+  "errors": [],
+  "note": "Actual keyboard/mouse automation; not unfamiliar human comprehension."
+}
